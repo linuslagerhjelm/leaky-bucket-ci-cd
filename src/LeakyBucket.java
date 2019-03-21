@@ -45,6 +45,10 @@ public final class LeakyBucket<T> {
         return fails.get();
     }
 
+    public void destroy() {
+        buckets.remove(this);
+    }
+
     private void decreaseFails() {
         fails.updateAndGet(i -> i > 0 ? i - 1 : 0);
     }
