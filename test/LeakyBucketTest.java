@@ -6,16 +6,14 @@ class LeakyBucketTest {
 
     @Test
     void basicTest() {
-        @SuppressWarnings("unchecked")
-        LeakyBucket<String> bucket = LeakyBucket.monitor(System.out::println);
+        var bucket = LeakyBucket.monitor(System.out::println);
 
         bucket.invoke("Hello world");
     }
 
     @Test
     void failsAreIncreasedOnError() {
-        @SuppressWarnings("unchecked")
-        LeakyBucket<String> bucket = LeakyBucket.monitor(__ -> { throw new RuntimeException(""); });
+        var bucket = LeakyBucket.monitor(__ -> { throw new RuntimeException(""); });
 
         try {
             bucket.invoke("");
@@ -26,8 +24,7 @@ class LeakyBucketTest {
 
     @Test
     void failsAreDecreasedPeriodically() throws InterruptedException {
-        @SuppressWarnings("unchecked")
-        LeakyBucket<String> bucket = LeakyBucket.monitor(__ -> { throw new RuntimeException(""); });
+        var bucket = LeakyBucket.monitor(__ -> { throw new RuntimeException(""); });
 
         try {
             bucket.invoke("");

@@ -19,9 +19,9 @@ public final class LeakyBucket<T> {
         this.operator = operator;
     }
 
-    public static <T> LeakyBucket monitor(Consumer<T> operation) {
+    public static <T> LeakyBucket<T> monitor(Consumer<T> operation) {
         if (buckets == null) initBucketMonitor();
-        LeakyBucket lb =  new LeakyBucket<>(operation);
+        LeakyBucket<T> lb =  new LeakyBucket<>(operation);
         buckets.add(lb);
         return lb;
     }
