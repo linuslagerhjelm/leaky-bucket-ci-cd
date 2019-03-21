@@ -6,6 +6,12 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
+/**
+ * Implements a leaky bucket data type. Such a data type can be set to monitor an operation and keep track of the
+ * rate at which said operation fails. This can be used to detect operations that has too high fail rate during a
+ * specific period of time.
+ * @param <T>
+ */
 public final class LeakyBucket<T> {
     public static final long COUNTDOWN_RATE = 1000;
     private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
