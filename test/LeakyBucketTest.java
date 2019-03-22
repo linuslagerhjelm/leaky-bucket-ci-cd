@@ -1,6 +1,7 @@
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class LeakyBucketTest {
 
@@ -33,6 +34,24 @@ class LeakyBucketTest {
         Thread.sleep(LeakyBucket.COUNTDOWN_RATE + 1);
 
         assertEquals(0, bucket.getCurrentFailCount());
+    }
+
+    @Test
+    void tooHighErrorRateCausesBucketToOverflow() {
+        var bucket = LeakyBucket.monitor(__ -> { throw new RuntimeException(""); }, 10);
+        boolean thrown = false;
+
+        for (int i = 0; i <= 10; ++i) {
+            try {
+                    bucket.invoke("");
+            }
+            catch (OperationFailedException ignore) {}
+            catch (BucketOverflowException e) {
+                thrown = true;
+            }
+        }
+
+        assertTrue(thrown);
     }
 
 }

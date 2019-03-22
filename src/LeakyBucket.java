@@ -17,27 +17,35 @@ public final class LeakyBucket<T> {
     private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     private static Set<LeakyBucket> buckets = null;
 
+    public final long MAX_FAIL;
     private final Consumer<T> operator;
     private AtomicInteger fails = new AtomicInteger(0);
 
 
-    private LeakyBucket(Consumer<T> operator) {
+    private LeakyBucket(Consumer<T> operator, long failsPerSecond) {
         this.operator = operator;
+        this.MAX_FAIL = failsPerSecond;
     }
 
-    public static <T> LeakyBucket<T> monitor(Consumer<T> operation) {
+    public static <T> LeakyBucket<T> monitor(Consumer<T> operation, long failsPerSecond) {
         if (buckets == null) initBucketMonitor();
-        LeakyBucket<T> lb =  new LeakyBucket<>(operation);
+        LeakyBucket<T> lb =  new LeakyBucket<>(operation, failsPerSecond);
         buckets.add(lb);
         return lb;
     }
 
-    public void invoke(T arg) throws OperationFailedException {
+    public static <T> LeakyBucket<T> monitor(Consumer<T> operation) {
+        return LeakyBucket.monitor(operation, 100);
+    }
+
+    public void invoke(T arg) throws OperationFailedException, BucketOverflowException {
         try {
             operator.accept(arg);
         } catch (Throwable t) {
-            fails.incrementAndGet();
-            throw new OperationFailedException(t);
+            int count = fails.incrementAndGet();
+
+            if (count < this.MAX_FAIL) throw new OperationFailedException(t);
+            else throw new BucketOverflowException();
         }
     }
 
