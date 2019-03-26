@@ -1,7 +1,6 @@
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
@@ -14,7 +13,6 @@ import java.util.function.Consumer;
  */
 public final class LeakyBucket<T> {
     public static final long COUNTDOWN_RATE = 1000;
-    private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     private static Set<LeakyBucket> buckets = null;
 
     public final long MAX_FAIL;
@@ -90,8 +88,9 @@ public final class LeakyBucket<T> {
 
     private static void initBucketMonitor() {
         buckets = new CopyOnWriteArraySet<>();
-        scheduler.scheduleAtFixedRate(() -> buckets.forEach(LeakyBucket::decreaseFails),
-                COUNTDOWN_RATE, COUNTDOWN_RATE, TimeUnit.MILLISECONDS);
+        Executors.newScheduledThreadPool(1)
+                .scheduleAtFixedRate(() -> buckets.forEach(LeakyBucket::decreaseFails),
+                        COUNTDOWN_RATE, COUNTDOWN_RATE, TimeUnit.MILLISECONDS);
     }
 
     private void decreaseFails() {
