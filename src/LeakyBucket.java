@@ -12,7 +12,7 @@ import java.util.function.Consumer;
  * @param <T>
  */
 public final class LeakyBucket<T> {
-    public static final long COUNTDOWN_RATE = 1000;
+    static final long COUNTDOWN_RATE = 1000;
     private static Set<LeakyBucket> buckets = null;
 
     public final long MAX_FAIL;
