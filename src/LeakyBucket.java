@@ -97,4 +97,14 @@ public final class LeakyBucket<T> {
         fails.updateAndGet(i -> i > 0 ? i - 1 : 0);
     }
 
+    /**
+     * Thrown when the error rate for the operation monitored by the bucket is exceeded.
+     */
+    public static class BucketOverflowException extends RuntimeException {
+        BucketOverflowException() {}
+        BucketOverflowException(String msg) {
+            super(msg);
+        }
+    }
+
 }

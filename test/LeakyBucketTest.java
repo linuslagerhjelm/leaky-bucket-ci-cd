@@ -46,7 +46,7 @@ class LeakyBucketTest {
                     bucket.invoke("");
             }
             catch (OperationFailedException ignore) {}
-            catch (BucketOverflowException e) {
+            catch (LeakyBucket.BucketOverflowException e) {
                 thrown = true;
             }
         }
