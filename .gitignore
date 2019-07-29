@@ -1,4 +1,5 @@
 .idea
+.gradle
 lib
 out
 .DS_Store
