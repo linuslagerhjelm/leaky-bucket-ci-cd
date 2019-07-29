@@ -15,7 +15,7 @@ RUN wget https://cdn.azul.com/zulu/bin/$javaversion.tar.gz
 
 RUN mkdir /usr/lib/jvm
 RUN cd /usr/lib/jvm
-RUN tar -xzf /$javaversion.tar.gz
+RUN tar -xzf /$javaversion.tar.gz -C /usr/lib/jvm/
 
 ENV JAVA_HOME /usr/lib/jvm/$javaversion
 
