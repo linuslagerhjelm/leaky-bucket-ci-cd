@@ -1,3 +1,5 @@
+package LeakyBucket;
+
 /**
  * Thrown to indicate that the attempted operation failed.
  * This exception wraps the exception that were originally thrown.
