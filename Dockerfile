@@ -12,9 +12,10 @@ RUN apt-get -qq -y install \
     zip
 
 RUN wget https://cdn.azul.com/zulu/bin/$javaversion.tar.gz
+
 RUN mkdir /usr/lib/jvm
 RUN cd /usr/lib/jvm
-RUN tar -xzf $HOME/$javaversion.tar.gz
+RUN tar -xzf /$javaversion.tar.gz
 
 ENV JAVA_HOME /usr/lib/jvm/$javaversion
 
