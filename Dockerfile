@@ -2,19 +2,21 @@ FROM ubuntu:16.04
 
 SHELL ["/bin/bash", "-c"]
 
+ARG javaversion=zulu12.3.11-ca-jdk12.0.2-linux_x64
+
 RUN apt-get update
 RUN apt-get -qq -y install \
     curl \
+    wget \
     unzip \
     zip
 
-RUN curl -s "https://get.sdkman.io" | bash
+RUN wget https://cdn.azul.com/zulu/bin/$javaversion.tar.gz
+RUN mkdir /usr/lib/jvm
+RUN cd /usr/lib/jvm
+RUN tar -xzf $HOME/$javaversion.tar.gz
 
-RUN chmod a+x "$HOME/.sdkman/bin/sdkman-init.sh"
-RUN chmod a+x "$HOME/.sdkman/src/sdkman-main.sh"
-RUN source "$HOME/.sdkman/bin/sdkman-init.sh"
+ENV JAVA_HOME /usr/lib/jvm/$javaversion
 
-RUN $HOME/.sdkman/src/sdkman-main.sh install java 12.0.2-zulu
-RUN $HOME/.sdkman/src/sdkman-main.sh install gradle 5.4.1
 
 
