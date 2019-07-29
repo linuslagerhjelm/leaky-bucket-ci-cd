@@ -7,7 +7,7 @@ an exception if the operation fails too many times within a specific time frame.
 
 Basic usage:
 
-```java
+```
 var action = LeakyBucket.monitor(s -> System.out.println(s));
 try {
     action.invoke("Hello!");
